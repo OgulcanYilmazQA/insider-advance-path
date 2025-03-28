@@ -11,9 +11,9 @@ class HomePage(BasePage):
         """
         super().__init__(driver)
         self.url = "https://useinsider.com"
-        self.company_menu_xpath = "(//*[@id='navbarDropdownMenuLink'])[5]"
-        self.careers_link_xpath = "//*[@id='navbarNavDropdown']/ul[1]/li[6]/div/div[2]/a[2]"
         self.cookie_button_xpath = "//*[@id='wt-cli-accept-all-btn']"
+        self.careers_link_xpath = "//*[@id='navbarNavDropdown']/ul[1]/li[6]/div/div[2]/a[2]"
+        self.company_menu_xpath = "(//*[@id='navbarDropdownMenuLink'])[5]"
 
     def open(self):
         """

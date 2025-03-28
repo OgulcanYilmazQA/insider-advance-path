@@ -14,18 +14,15 @@ def pytest_runtest_makereport(item):
     :param item: pytest test item
 
     """
-    # Testin sonucunu al
     outcome = yield
     report = outcome.get_result()
 
-    # Sadece testin "call" (yürütme) aşamasında sonucu kaydet
-    if report.when == "call":
+    if report.when == "CALL":
         test_name = item.name
-        status = "passed" if report.passed else "failed"
+        status = "PASSED" if report.passed else "FAIL"
         duration = getattr(report, 'duration', 0)
         timestamp = datetime.utcnow()
 
-        # Sonucu InfluxDB'ye yaz
         try:
             insert_test_result_to_influxdb(
                 test_name=test_name,
@@ -34,9 +31,8 @@ def pytest_runtest_makereport(item):
                 timestamp=timestamp
             )
         except Exception as e:
-            print(f"❌ InfluxDB'ye yazma hatası: {e}")
+            print(f"❌ Writing to the InfluxDB failed: {e}")
 
-        # Test başarısızsa ekran görüntüsü al
         if report.failed:
             driver = item.funcargs.get("driver", None)
             if driver:
@@ -44,4 +40,4 @@ def pytest_runtest_makereport(item):
                 os.makedirs(screenshot_dir, exist_ok=True)
                 screenshot_path = os.path.join(screenshot_dir, f"{test_name}.png")
                 driver.save_screenshot(screenshot_path)
-                print(f"🖼 Ekran görüntüsü alındı: {screenshot_path}")
+                print(f"🖼 Screenshot done: {screenshot_path}")
