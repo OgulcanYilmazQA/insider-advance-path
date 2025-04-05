@@ -4,16 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="be88fe45-58d6-4147-a1c0-56e8680ada21" name="Changes" comment="New Changes">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
+    <list default="true" id="be88fe45-58d6-4147-a1c0-56e8680ada21" name="Changes" comment="CR Fix DONE">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DBController.py" beforeDir="false" afterPath="$PROJECT_DIR$/DBController.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/BasePage.py" beforeDir="false" afterPath="$PROJECT_DIR$/pages/base_page.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/CareerPage.py" beforeDir="false" afterPath="$PROJECT_DIR$/pages/career_page.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/HomePage.py" beforeDir="false" afterPath="$PROJECT_DIR$/pages/home_page.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/QAPage.py" beforeDir="false" afterPath="$PROJECT_DIR$/pages/qa_page.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/ConfigTest.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/config_test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/tests.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/tests.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -147,7 +139,15 @@
       <option name="project" value="LOCAL" />
       <updated>1743188284776</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="CR Fix DONE">
+      <option name="closed" value="true" />
+      <created>1743816187669</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1743816187669</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -157,6 +157,7 @@
     <MESSAGE value="Initial empty base for code review" />
     <MESSAGE value="test" />
     <MESSAGE value="New Changes" />
-    <option name="LAST_COMMIT_MESSAGE" value="New Changes" />
+    <MESSAGE value="CR Fix DONE" />
+    <option name="LAST_COMMIT_MESSAGE" value="CR Fix DONE" />
   </component>
 </project>
