@@ -4,12 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="be88fe45-58d6-4147-a1c0-56e8680ada21" name="Changes" comment="test">
-      <change beforePath="$PROJECT_DIR$/pages/BasePage.py" beforeDir="false" afterPath="$PROJECT_DIR$/pages/BasePage.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/CareerPage.py" beforeDir="false" afterPath="$PROJECT_DIR$/pages/CareerPage.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/HomePage.py" beforeDir="false" afterPath="$PROJECT_DIR$/pages/HomePage.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/QAPage.py" beforeDir="false" afterPath="$PROJECT_DIR$/pages/QAPage.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/ConfigTest.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/ConfigTest.py" afterDir="false" />
+    <list default="true" id="be88fe45-58d6-4147-a1c0-56e8680ada21" name="Changes" comment="New Changes">
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DBController.py" beforeDir="false" afterPath="$PROJECT_DIR$/DBController.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/BasePage.py" beforeDir="false" afterPath="$PROJECT_DIR$/pages/base_page.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/CareerPage.py" beforeDir="false" afterPath="$PROJECT_DIR$/pages/career_page.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/HomePage.py" beforeDir="false" afterPath="$PROJECT_DIR$/pages/home_page.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/QAPage.py" beforeDir="false" afterPath="$PROJECT_DIR$/pages/qa_page.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/ConfigTest.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/config_test.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/tests.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/tests.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -136,7 +139,15 @@
       <option name="project" value="LOCAL" />
       <updated>1743185691570</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="New Changes">
+      <option name="closed" value="true" />
+      <created>1743188284776</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1743188284776</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -145,6 +156,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initial empty base for code review" />
     <MESSAGE value="test" />
-    <option name="LAST_COMMIT_MESSAGE" value="test" />
+    <MESSAGE value="New Changes" />
+    <option name="LAST_COMMIT_MESSAGE" value="New Changes" />
   </component>
 </project>
