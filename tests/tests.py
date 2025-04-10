@@ -5,9 +5,9 @@ from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.firefox.service import Service as FirefoxService
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
-from pages.home_page import home_page
-from pages.career_page import career_page
-from pages.qa_page import qa_page
+from pages.home_page import HomePage
+from pages.career_page import CareerPage
+from pages.qa_page import QaPage
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
@@ -33,7 +33,7 @@ class InsiderCareerPageTest(unittest.TestCase):
                 driver = self.init_driver(browser)
                 try:
                     logger.info("🚀 Open Insider website")
-                    page_home = home_page(driver)
+                    page_home = HomePage(driver)
                     page_home.open()
                     self.assertTrue(page_home.is_accessible(), "❌ Error, page not found")
 
@@ -42,7 +42,7 @@ class InsiderCareerPageTest(unittest.TestCase):
 
                     logger.info("✅ Redirect to the Career page")
                     page_home.navigate_to_careers()
-                    careers_page = career_page(driver)
+                    careers_page = CareerPage(driver)
                     self.assertTrue(careers_page.is_accessible(), "❌ Error: Career page not found")
 
                     logger.info("✅ Sayfa bölümleri kontrol ediliyor.")
@@ -50,7 +50,7 @@ class InsiderCareerPageTest(unittest.TestCase):
 
                     logger.info("✅ Redirecting to the QA Careers page.")
                     careers_page.go_to_qa_careers()
-                    qa_careers_page = qa_page(driver)
+                    qa_careers_page = QaPage(driver)
 
                     logger.info("🔍 Checking for the QA Careers page.")
                     self.assertTrue(qa_careers_page.is_accessible(), "❌ Error: QA Careers page not found!")

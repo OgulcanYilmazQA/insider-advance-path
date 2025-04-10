@@ -2,10 +2,10 @@ import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from .base_page import base_page
+from .base_page import BasePage
 
 
-class qa_page(base_page):
+class QaPage(BasePage):
     # Locators
     DEPARTMANT_CONTANIER = "select2-filter-by-department-container"
     DEPARTMANT_DROPDOWN = "//select[@id='department']"

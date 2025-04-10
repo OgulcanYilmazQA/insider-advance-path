@@ -1,8 +1,8 @@
 from selenium.webdriver.common.by import By
-from .base_page import base_page
+from .base_page import BasePage
 
 
-class home_page(base_page):
+class HomePage(BasePage):
     # Locator definitions
     URL = "https://useinsider.com"
     COOKIE_BUTTON = "//*[@id='wt-cli-accept-all-btn']"

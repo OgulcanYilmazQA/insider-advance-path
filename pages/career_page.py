@@ -2,10 +2,10 @@ import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from .base_page import base_page
+from .base_page import BasePage
 
 
-class career_page(base_page):
+class CareerPage(BasePage):
     # Locator definitions
     COOKIE_ACCEPT = "//*[@id='wt-cli-accept-all-btn']"
     LOCATIONS_XPATH = "//*[@id='career-our-location']/div/div/div/div[1]"
