@@ -1,8 +1,12 @@
+import logging
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 from selenium.webdriver.support import expected_conditions as EC
 
+# Logger tanımı
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 class BasePage:
     """
@@ -21,7 +25,7 @@ class BasePage:
             wait = WebDriverWait(self.driver, timeout) if timeout else self.wait
             return wait.until(EC.presence_of_element_located((by, locator)))
         except TimeoutException:
-            print(f"❌ Error: {locator} element not found.")
+            logger.error(f"Element not found: {locator}")
             return None
 
     def wait_for_element_to_be_clickable(self, by, locator, timeout=None):
@@ -29,7 +33,7 @@ class BasePage:
             wait = WebDriverWait(self.driver, timeout) if timeout else self.wait
             return wait.until(EC.element_to_be_clickable((by, locator)))
         except TimeoutException:
-            print(f"❌ Error: {locator} element is not clickable.")
+            logger.error(f"Element is not clickable: {locator}")
             return None
 
     def click_element(self, by, locator):
@@ -37,51 +41,47 @@ class BasePage:
         if element:
             try:
                 element.click()
-                print(f"✅ Click Success: {locator}")
+                logger.info(f"Click Success: {locator}")
             except Exception:
-                print(f"⚠️ Selenium could not clicked, Clicking with JavaScript: {locator}")
+                logger.warning(f"Selenium couldn't click, using JavaScript: {locator}")
                 self.driver.execute_script("arguments[0].click();", element)
         else:
-            print(f"⚠️ Warning: {locator} element could not clicked.")
+            logger.warning(f"Element could not be clicked: {locator}")
 
     def scroll_to_element(self, by, locator):
         element = self.wait_for_element(by, locator)
         if element:
             self.driver.execute_script("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", element)
-            print(f"🔽 Page scrolled: {locator}")
+            logger.info(f"Page scrolled to: {locator}")
         else:
-            print(f"⚠️ Warning: {locator} couldn't scroll, element not found.")
+            logger.warning(f"Couldn't scroll to element, not found: {locator}")
 
     def scroll_to_web_element(self, element):
-        """
-        Scrolls the given WebElement into view.
-
-        :param element: WebElement instance
-        """
+        """Scrolls the given WebElement into view."""
         if element:
             self.driver.execute_script("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", element)
-            print("🔽 Page scrolled to element (via WebElement).")
+            logger.info("Page scrolled to WebElement.")
         else:
-            print("⚠️ Warning: Provided WebElement is None, cannot scroll.")
+            logger.warning("Provided WebElement is None, cannot scroll.")
 
     def accept_cookies(self, cookie_xpath):
         try:
-            print("🔄 Cookies")
+            logger.info("Looking for cookie accept button...")
             cookie_button = self.wait_for_element_to_be_clickable(By.XPATH, cookie_xpath)
             if cookie_button:
                 cookie_button.click()
-                print("✅ Cookies accepted!")
+                logger.info("Cookies accepted!")
             else:
-                print("⚠️ Cookies not found.")
+                logger.warning("Cookie button not found.")
         except NoSuchElementException:
-            print("⚠️ Cookie skipped.")
+            logger.warning("Cookie button skipped due to NoSuchElementException.")
 
     def wait_for_page_to_load(self):
         try:
             self.wait.until(lambda d: d.execute_script("return document.readyState") == "complete")
-            print("✅ Page done")
+            logger.info("Page fully loaded.")
         except TimeoutException:
-            print("⚠️ Page loading could not finish.")
+            logger.warning("Page loading did not finish in time.")
 
     def get_element_text(self, by, locator):
         element = self.wait_for_element(by, locator)
@@ -94,9 +94,9 @@ class BasePage:
             WebDriverWait(self.driver, timeout).until(
                 EC.text_to_be_present_in_element((by, locator), expected_text)
             )
-            print(f"✅ Element text changed as '{expected_text}'.")
+            logger.info(f"Element text changed to '{expected_text}'.")
             return True
         except TimeoutException:
             actual_text = self.get_element_text(by, locator)
-            print(f"❌ Error: Element text could not changed '{expected_text}'. Last change: '{actual_text}'")
+            logger.error(f"Expected text '{expected_text}' not found. Current text: '{actual_text}'")
             return False

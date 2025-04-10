@@ -1,8 +1,18 @@
+import logging
 from selenium.webdriver.common.by import By
 from .base_page import BasePage
 
+# Logger tanımı
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 class HomePage(BasePage):
+    """
+    Initialize home page with driver and default timeout.
+
+    :param driver: Selenium WebDriver instance
+    :param int timeout: Maximum wait time for element actions
+    """
     # Locator definitions
     URL = "https://useinsider.com"
     COOKIE_BUTTON = "//*[@id='wt-cli-accept-all-btn']"
@@ -16,27 +26,28 @@ class HomePage(BasePage):
         :param driver: Selenium WebDriver instance
         """
         super().__init__(driver)
-        self.check()
+        self.navigate_to_home_page()
 
-    def check(self):
+    def navigate_to_home_page(self):
         """
         Checks visibility of critical elements on the home page.
 
         :raises Exception: If any critical element is not visible
         """
         try:
-            print("✅ Running initial checks for critical elements on Home Page...")
+            logger.info("Running initial checks for critical elements on Home Page...")
             self.wait_for_element(By.XPATH, self.COOKIE_BUTTON)
             self.wait_for_element(By.XPATH, self.COMPANY_MENU)
-            print("✅ Critical elements on Home Page are visible.")
+            logger.info("Critical elements on Home Page are visible.")
         except Exception as e:
-            print(f"❌ Home Page critical element not found: {e}")
+            logger.error(f"Home Page critical element not found: {e}")
             raise
 
     def open(self):
         """
         Opens the Insider homepage.
         """
+        logger.info("Opening Insider homepage...")
         self.driver.get(self.URL)
 
     def is_accessible(self):
@@ -45,17 +56,21 @@ class HomePage(BasePage):
 
         :return: True if title contains 'Insider', else False
         """
-        return "Insider" in self.driver.title
+        accessible = "Insider" in self.driver.title
+        logger.info(f"Homepage accessibility check: {'Accessible' if accessible else 'Not Accessible'}")
+        return accessible
 
     def accept_cookies(self):
         """
         Accepts cookies using BasePage method.
         """
+        logger.info("Attempting to accept cookies...")
         super().accept_cookies(self.COOKIE_BUTTON)
 
     def navigate_to_careers(self):
         """
         Navigates to the Careers page through the Company menu.
         """
+        logger.info("Navigating to Careers page...")
         self.click_element(By.XPATH, self.COMPANY_MENU)
         self.click_element(By.XPATH, self.CAREERS_LINK)
