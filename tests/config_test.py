@@ -1,7 +1,7 @@
 import pytest
 import os
 from datetime import datetime
-from DBController import insert_test_result_to_influxdb
+from utils.DBController import insert_test_result_to_influxdb
 
 
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)

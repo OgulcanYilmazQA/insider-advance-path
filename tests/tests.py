@@ -16,6 +16,7 @@ class InsiderCareerPageTest(unittest.TestCase):
 
     def setUp(self):
         self.browsers = ["chrome", "firefox"]
+        self.driver = None
 
     def init_driver(self, browser):
         if browser == "chrome":
@@ -30,50 +31,44 @@ class InsiderCareerPageTest(unittest.TestCase):
     def test_insider_career_page(self):
         for browser in self.browsers:
             with self.subTest(browser=browser):
-                driver = self.init_driver(browser)
-                try:
-                    logger.info("🚀 Open Insider website")
-                    page_home = HomePage(driver)
-                    page_home.open()
-                    self.assertTrue(page_home.is_accessible(), "❌ Error, page not found")
+                self.driver = self.init_driver(browser)
 
-                    logger.info("✅ Cookies accepted")
-                    page_home.accept_cookies()
+                # 1. Open Insider website
+                logger.info("🚀 1. Open Insider website")
+                page_home = HomePage(self.driver)
+                page_home.open()
+                self.assertTrue(page_home.is_accessible(), "Homepage not accessible")
+                page_home.accept_cookies()
 
-                    logger.info("✅ Redirect to the Career page")
-                    page_home.navigate_to_careers()
-                    careers_page = CareerPage(driver)
-                    self.assertTrue(careers_page.is_accessible(), "❌ Error: Career page not found")
+                # 2. Redirect to the Career page
+                logger.info("➡️ 2. Redirect to the Career page")
+                page_home.navigate_to_careers()
+                careers_page = CareerPage(self.driver)
+                self.assertTrue(careers_page.is_accessible(), "Career page not accessible")
+                self.assertTrue(careers_page.verify_sections(), "Career sections verification failed")
 
-                    logger.info("✅ Sayfa bölümleri kontrol ediliyor.")
-                    self.assertTrue(careers_page.verify_sections(), "❌ Error: Careers section not correct!")
+                # 3. Redirecting to the QA Careers page
+                logger.info("➡️ 3. Redirecting to the QA Careers page")
+                careers_page.go_to_qa_careers()
+                qa_page = QaPage(self.driver)
+                self.assertTrue(qa_page.is_accessible(), "QA Careers page not accessible")
 
-                    logger.info("✅ Redirecting to the QA Careers page.")
-                    careers_page.go_to_qa_careers()
-                    qa_careers_page = QaPage(driver)
+                # 4. Click "See all QA jobs"
+                qa_page.click_see_all_qa_jobs()
 
-                    logger.info("🔍 Checking for the QA Careers page.")
-                    self.assertTrue(qa_careers_page.is_accessible(), "❌ Error: QA Careers page not found!")
+                # 5. Filter jobs by QA department and Istanbul location
+                qa_page.select_location_if_department_is_qa()
+                qa_page.wait_for_job_cards_to_be_replaced()
+                qa_page.wait_for_job_cards_to_load()
 
-                    logger.info("✅ 'See all QA jobs' button checked and click.")
-                    qa_careers_page.click_see_all_qa_jobs()
+                # 6. Verify QA job listings
+                self.assertTrue(qa_page.verify_job_listings(), "QA job listings do not match expected criteria")
 
-                    logger.info("✅ The Department is expected to be 'Quality Assurance' and the location is being selected.")
-                    qa_careers_page.select_location_if_department_is_qa()
-                    qa_careers_page.wait_for_job_cards_to_be_replaced()
+                # 7. Check 'View Role' redirection
+                self.assertTrue(qa_page.verify_view_role_redirects(), "'View Role' button redirection failed")
 
-                    qa_careers_page.wait_for_job_cards_to_load()
-                    logger.info("✅ Job postings are being verified.")
-                    self.assertTrue(qa_careers_page.verify_job_listings(), "❌Error: Job postings do not meet the criteria!")
+                logger.info("All QA career page tests completed successfully")
 
-                    logger.info("✅ View Role butonu kontrol ediliyor...")
-                    self.assertTrue(qa_careers_page.verify_view_role_redirects(), "❌Error: View Role button does not redirect!")
-
-                    logger.info("🎉 All tests completed successfully!")
-                    logger.info(f"🌐 Last URL: {driver.current_url}")
-
-                finally:
-                    driver.quit()
-
-if __name__ == "__main__":
-    unittest.main()
+    def tearDown(self):
+        if self.driver:
+            self.driver.quit()
