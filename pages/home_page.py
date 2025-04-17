@@ -14,23 +14,32 @@ class HomePage(BasePage):
         self.navigate_to_home_page()
 
     def navigate_to_home_page(self):
-        """Verifies that critical homepage elements are present."""
+        """
+        Checks if the page is accessible by validating the title or URL.
+
+        """
+        self.driver.get(self.URL)
         self.wait_for_element(By.XPATH, self.COOKIE_BUTTON)
         self.wait_for_element(By.XPATH, self.COMPANY_MENU)
 
-    def open(self):
-        """Navigates to the Insider homepage."""
-        self.driver.get(self.URL)
-
     def is_accessible(self):
-        """Checks if homepage is accessible by verifying the title."""
+        """
+        Checks if homepage is accessible by verifying the title.
+
+        """
         return "insider" in self.driver.title.lower()
 
     def accept_cookies(self):
-        """Accepts cookies using the BasePage helper method."""
+        """
+        Accepts cookies using the BasePage helper method.
+
+        """
         super().accept_cookies(self.COOKIE_BUTTON)
 
     def navigate_to_careers(self):
-        """Navigates to the Careers page through the Company dropdown."""
+        """
+        Navigates to the Careers page through the Company dropdown.
+
+        """
         self.click_element(By.XPATH, self.COMPANY_MENU)
         self.click_element(By.XPATH, self.CAREERS_LINK)

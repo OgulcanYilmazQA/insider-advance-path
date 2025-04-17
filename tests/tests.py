@@ -3,8 +3,9 @@ import logging
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.firefox.service import Service as FirefoxService
-from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
+import chromedriver_autoinstaller
+
 from pages.home_page import HomePage
 from pages.career_page import CareerPage
 from pages.qa_page import QaPage
@@ -20,11 +21,14 @@ class InsiderCareerPageTest(unittest.TestCase):
 
     def init_driver(self, browser):
         if browser == "chrome":
-            service = ChromeService(ChromeDriverManager().install())
-            driver = webdriver.Chrome(service=service)
+            chromedriver_autoinstaller.install()  # Otomatik uyumlu chromedriver yükler
+            driver = webdriver.Chrome()
         elif browser == "firefox":
             service = FirefoxService(GeckoDriverManager().install())
             driver = webdriver.Firefox(service=service)
+        else:
+            raise ValueError(f"Unsupported browser: {browser}")
+
         driver.maximize_window()
         return driver
 
@@ -32,11 +36,9 @@ class InsiderCareerPageTest(unittest.TestCase):
         for browser in self.browsers:
             with self.subTest(browser=browser):
                 self.driver = self.init_driver(browser)
-
                 # 1. Open Insider website
                 logger.info("🚀 1. Open Insider website")
                 page_home = HomePage(self.driver)
-                page_home.open()
                 self.assertTrue(page_home.is_accessible(), "Homepage not accessible")
                 page_home.accept_cookies()
 
