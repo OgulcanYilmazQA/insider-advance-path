@@ -1,66 +1,76 @@
-import pytest
+import unittest
+import logging
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.firefox.service import Service as FirefoxService
-from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
-from pages.HomePage import HomePage
-from pages.CareerPage import CareerPage
-from pages.QAPage import QAPage
+import chromedriver_autoinstaller
 
+from pages.home_page import HomePage
+from pages.career_page import CareerPage
+from pages.qa_page import QaPage
 
-@pytest.fixture(params=["chrome", "firefox"])
-def driver(request):
-    global driver
-    if request.param == "chrome":
-        service = ChromeService(ChromeDriverManager().install())
-        driver = webdriver.Chrome(service=service)
-    elif request.param == "firefox":
-        service = FirefoxService(GeckoDriverManager().install())
-        driver = webdriver.Firefox(service=service)
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
-    driver.maximize_window()
-    yield driver
-    driver.quit()
+class InsiderCareerPageTest(unittest.TestCase):
 
+    def setUp(self):
+        self.browsers = ["chrome", "firefox"]
+        self.driver = None
 
-def test_insider_career_page(driver):
-    print("🚀 Open Insider website")
-    home_page = HomePage(driver)
-    home_page.open()
-    assert home_page.is_accessible(), "❌ Error, page not found"
+    def init_driver(self, browser):
+        if browser == "chrome":
+            chromedriver_autoinstaller.install()  # Otomatik uyumlu chromedriver yükler
+            driver = webdriver.Chrome()
+        elif browser == "firefox":
+            service = FirefoxService(GeckoDriverManager().install())
+            driver = webdriver.Firefox(service=service)
+        else:
+            raise ValueError(f"Unsupported browser: {browser}")
 
-    print("✅ Cookies accepted")
-    home_page.accept_cookies()
+        driver.maximize_window()
+        return driver
 
-    print("✅ Redirect to the Career page")
-    home_page.navigate_to_careers()
-    careers_page = CareerPage(driver)
-    assert careers_page.is_accessible(), "❌ Error: Career page not found"
+    def test_insider_career_page(self):
+        for browser in self.browsers:
+            with self.subTest(browser=browser):
+                self.driver = self.init_driver(browser)
+                # 1. Open Insider website
+                logger.info("🚀 1. Open Insider website")
+                page_home = HomePage(self.driver)
+                self.assertTrue(page_home.is_accessible(), "Homepage not accessible")
+                page_home.accept_cookies()
 
-    print("✅ Sayfa bölümleri kontrol ediliyor.")
-    assert careers_page.verify_sections(), "❌ Error: Careers section not correct!"
+                # 2. Redirect to the Career page
+                logger.info("➡️ 2. Redirect to the Career page")
+                page_home.navigate_to_careers()
+                careers_page = CareerPage(self.driver)
+                self.assertTrue(careers_page.is_accessible(), "Career page not accessible")
+                self.assertTrue(careers_page.verify_sections(), "Career sections verification failed")
 
-    print("✅ Redirecting to the QA Careers page.")
-    careers_page.go_to_qa_careers()
-    qa_careers_page = QAPage(driver)
+                # 3. Redirecting to the QA Careers page
+                logger.info("➡️ 3. Redirecting to the QA Careers page")
+                careers_page.go_to_qa_careers()
+                qa_page = QaPage(self.driver)
+                self.assertTrue(qa_page.is_accessible(), "QA Careers page not accessible")
 
-    print("🔍 Checking for the QA Careers page.")
-    assert qa_careers_page.is_accessible(), "❌ Error: QA Careers page not found!"
+                # 4. Click "See all QA jobs"
+                qa_page.click_see_all_qa_jobs()
 
-    print("✅ 'See all QA jobs' button checked and click.")
-    qa_careers_page.click_see_all_qa_jobs()
+                # 5. Filter jobs by QA department and Istanbul location
+                qa_page.select_location_if_department_is_qa()
+                qa_page.wait_for_job_cards_to_be_replaced()
+                qa_page.wait_for_job_cards_to_load()
 
-    print("✅ The Department is expected to be 'Quality Assurance' and the location is being selected.")
-    qa_careers_page.select_location_if_department_is_qa()
-    qa_careers_page.wait_for_job_cards_to_be_replaced()
+                # 6. Verify QA job listings
+                self.assertTrue(qa_page.verify_job_listings(), "QA job listings do not match expected criteria")
 
-    qa_careers_page.wait_for_job_cards_to_load()
-    print("✅ Job postings are being verified.")
-    assert qa_careers_page.verify_job_listings(), "❌Error: Job postings do not meet the criteria!"
+                # 7. Check 'View Role' redirection
+                self.assertTrue(qa_page.verify_view_role_redirects(), "'View Role' button redirection failed")
 
-    print("✅ View Role butonu kontrol ediliyor...")
-    assert qa_careers_page.verify_view_role_redirects(), "❌Error: View Role button does not redirect!"
+                logger.info("All QA career page tests completed successfully")
 
-    print("🎉 All tests completed successfully!")
-    print("🌐 Last URL:", driver.current_url)
+    def tearDown(self):
+        if self.driver:
+            self.driver.quit()

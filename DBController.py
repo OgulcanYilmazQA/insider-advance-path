@@ -18,7 +18,7 @@ def insert_test_result_to_influxdb(test_name, status, duration, timestamp):
     """
     try:
         client = InfluxDBClient(host='localhost', port=8086)
-        client.switch_database('test_results')
+        client.switch_database('mydb')
 
         json_body = [
             {

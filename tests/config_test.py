@@ -1,6 +1,6 @@
 import pytest
 import os
-from datetime import datetime
+from datetime import datetime, timezone
 from DBController import insert_test_result_to_influxdb
 
 
@@ -17,11 +17,11 @@ def pytest_runtest_makereport(item):
     outcome = yield
     report = outcome.get_result()
 
-    if report.when == "CALL":
+    if report.when == "call":
         test_name = item.name
-        status = "PASSED" if report.passed else "FAIL"
+        status = "passed" if report.passed else "failed"
         duration = getattr(report, 'duration', 0)
-        timestamp = datetime.utcnow()
+        timestamp = datetime.now(timezone.utc)
 
         try:
             insert_test_result_to_influxdb(
